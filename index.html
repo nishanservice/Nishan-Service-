@@ -1,167 +1,497 @@
 <!DOCTYPE html>
 <html lang="si">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deposit & Withdraw</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NISHAN SERVICE</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f9;
-    text-align: center;
-    padding: 40px;
-}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-.card {
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    max-width: 400px;
-    margin: auto;
-}
+    <style>
+        :root {
+            --primary-bg: #100f2b;
+            --secondary-bg: #1e1a4b;
+            --card-bg: rgba(28, 40, 82, 0.5);
+            --button-bg: rgba(43, 56, 113, 0.4);
+            --border-color: rgba(132, 145, 255, 0.25);
+            --text-color: #f0f0f0;
+            --gold-color: #FFD700;
+            --green-color: #28a745;
+            --light-green-color: #4CAF50;
+            --promo-glow-color: #00c3ff;
+            --shimmer-color: rgba(0, 195, 255, 0.4); 
+        }
 
-h1 {
-    color: #2c3e50;
-}
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
 
-/* Number + Copy */
-.number-box {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: #ecf0f1;
-    padding: 10px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin: 15px 0;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-.number-text {
-    font-size: 18px;
-    font-weight: bold;
-    color: #27ae60;
-}
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(160deg, var(--secondary-bg), var(--primary-bg));
+            color: var(--text-color);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-/* Copy Icon */
-.copy-icon {
-    font-size: 18px;
-    color: #555;
-}
+        /* --- INTRO / PRELOADER STYLES --- */
+        .intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(160deg, var(--secondary-bg), var(--primary-bg));
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .intro-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .intro-content {
+            text-align: center;
+        }
+        .intro-logo {
+            width: 250px; /* Logo size increased */
+            height: auto;
+            margin-bottom: 30px;
+            animation: zoom-in 5s ease-out forwards;
+        }
+        
+        /* New Loading Bar styles */
+        .loading-bar-container {
+            width: 250px;
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        .loading-bar-progress {
+            width: 0;
+            height: 100%;
+            background-color: #fff;
+            border-radius: 3px;
+            animation: fill-bar 5s ease-out forwards;
+        }
 
-/* Message */
-.message {
-    font-size: 15px;
-    color: #555;
-    margin-bottom: 25px;
-}
+        @keyframes zoom-in {
+            from {
+                transform: scale(0.2);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        @keyframes fill-bar {
+            from {
+                width: 0%;
+            }
+            to {
+                width: 100%;
+            }
+        }
 
-/* Button Wrapper */
-.btn-wrapper {
-    position: relative;
-    display: inline-block;
-    padding: 30px;
-}
+        /* Hide main content initially */
+        .hidden-content {
+            display: none;
+        }
 
-/* WhatsApp Button */
-.whatsapp-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background-color: #25D366;
-    color: white;
-    padding: 12px 22px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: bold;
-    position: relative;
-    z-index: 2;
-}
+        /* --- MAIN CONTENT STYLES --- */
+        .main-content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 15px;
+            width: 100%;
+            min-height: 100vh;
+        }
+        
+        .card-container {
+            width: 100%; max-width: 400px; background: var(--card-bg);
+            border-radius: 25px; border: 1px solid var(--border-color);
+            padding: 20px; backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px); text-align: center;
+            display: flex; flex-direction: column; gap: 20px;
+        }
 
-/* Arrows */
-.arrow {
-    position: absolute;
-    color: red;
-    font-size: 22px;
-    animation: pulse 1.5s infinite;
-}
-
-.arrow.top    { top: 0; left: 50%; transform: translate(-50%, -50%); }
-.arrow.bottom { bottom: 0; left: 50%; transform: translate(-50%, 50%); }
-.arrow.left   { left: 0; top: 50%; transform: translate(-50%, -50%); }
-.arrow.right  { right: 0; top: 50%; transform: translate(50%, -50%); }
-
-@keyframes pulse {
-    0%   { opacity: 0.3; transform: scale(0.8); }
-    50%  { opacity: 1; transform: scale(1.2); }
-    100% { opacity: 0.3; transform: scale(0.8); }
-}
-
-/* Note */
-.note {
-    margin-top: 15px;
-    font-size: 14px;
-    color: #777;
-}
-
-/* Copy message */
-.copy-msg {
-    font-size: 13px;
-    color: green;
-    display: none;
-}
-</style>
-
+        .top-nav { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 5px; }
+        .top-nav img { height: 25px; width: auto; object-fit: contain; opacity: 0.8; transition: opacity 0.3s; }
+        .top-nav img:hover { opacity: 1; }
+        .profile-header { margin-bottom: 10px; }
+        .profile-image-wrapper { position: relative; display: inline-block; margin-bottom: 10px; }
+        .logo { width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--border-color); background-color: var(--primary-bg); object-fit: cover; padding: 5px; display: block; }
+        .status { background-color: var(--green-color); color: white; font-size: 0.65em; font-weight: 500; padding: 2px 9px; border-radius: 20px; border: 1.5px solid var(--primary-bg); position: absolute; bottom: 8px; right: -2px; }
+        .quick-actions { display: flex; justify-content: center; gap: 10px; }
+        .action-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-color); text-decoration: none; padding: 8px 18px; border-radius: 20px; font-size: 0.9em; display: flex; align-items: center; gap: 8px; transition: all 0.3s; }
+        .action-btn:hover { background-color: var(--button-bg); transform: translateY(-2px); }
+        .action-btn.reviews-btn i { color: #1773EA; }
+        .action-btn.youtube-btn i { color: #FF0000; }
+        .profile-info { margin-bottom: 15px; }
+        .profile-info h1, .profile-info p { display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .profile-info h1 { font-size: 1.25em; font-weight: 600; }
+        .profile-info p { font-size: 1em; font-weight: 400; color: rgba(255, 255, 255, 0.8); margin-top: 5px; }
+        .links-section, .registration-links { display: flex; flex-direction: column; gap: 12px; }
+        .link-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 15px; background: var(--button-bg); border: 1px solid var(--border-color); border-radius: 12px; text-decoration: none; color: var(--text-color); font-size: 1em; font-weight: 500; gap: 12px; transition: background-color 0.3s, transform 0.2s; }
+        .link-btn:hover { background-color: rgba(43, 56, 113, 0.7); transform: translateY(-2px); }
+        .link-btn i { font-size: 1.2em; transition: color 0.3s; }
+        .registration-links .link-btn img { height: 30px; width: auto; object-fit: contain; }
+        .link-btn.whatsapp i { color: #25D366; }
+        .link-btn.telegram i, .link-btn.channel i { color: #229ED9; }
+        .link-btn.call i { color: #34B7F1; }
+        .link-btn.email i { color: #EA4335; }
+        .link-btn.facebook i { color: #1877F2; }
+        .link-btn.bank i { color: #D4AF37; }
+        .link-row { display: flex; gap: 12px; }
+        .link-row .link-btn { flex: 1; }
+        .promo-section { margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .promo-section .sinhala-text { font-size: 0.95em; line-height: 1.6; margin-bottom: 20px; color: rgba(255, 255, 255, 0.9); }
+        .promo-code-box { position: relative; border-radius: 10px; cursor: pointer; overflow: hidden; border: 1px solid var(--border-color); background: linear-gradient(90deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 35%, var(--shimmer-color) 50%, rgba(0, 0, 0, 0.4) 65%, rgba(0, 0, 0, 0.4) 100%); background-size: 200% 100%; animation: shimmer 4s linear infinite; box-shadow: 0 0 15px rgba(0, 195, 255, 0.2); transition: box-shadow 0.3s; }
+        .promo-code-box::before { content: none; }
+        .promo-code-box:hover { box-shadow: 0 0 20px rgba(0, 195, 255, 0.4); }
+        .promo-code-inner { background: transparent; padding: 12px 20px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+        .promo-code-box .promo-text { display: flex; align-items: center; gap: 10px; font-weight: 600; color: white; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
+        .slider-section { margin-top: 20px; }
+        .slider-container { width: 100%; aspect-ratio: 16 / 9; position: relative; overflow: hidden; border-radius: 12px; border: 1px solid var(--border-color); }
+        .slides-wrapper { display: flex; height: 100%; } 
+        .slides-wrapper.sliding { transition: transform 0.8s ease-in-out; }
+        .slide { flex-shrink: 0; width: 100%; height: 100%; }
+        .slide img { width: 100%; height: 100%; object-fit: cover; }
+        .slider-dots { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;}
+        .dot { width: 8px; height: 8px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.5); cursor: pointer; transition: background-color 0.3s; }
+        .dot.active { background-color: #fff; }
+        .registration-heading { margin-top: 20px; margin-bottom: 10px; font-size: 1em; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--text-color); }
+        .features-list { margin-top: 25px; display: flex; flex-direction: column; gap: 10px; font-size: 0.95em; }
+        .features-list p { display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .features-list i { color: var(--light-green-color); }
+        .cashback-offer { margin-top: 20px; font-size: 0.9em; font-weight: 500; line-height: 1.6; color: rgba(255, 255, 255, 0.9); }
+        .main-footer { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 0.8em; color: rgba(255, 255, 255, 0.7); }
+        .footer-contact { margin-bottom: 15px; }
+        .footer-contact p { line-height: 1.5; }
+        .footer-copyright p { line-height: 1.6; }
+        .footer-copyright a { color: var(--gold-color); text-decoration: none; font-weight: 600; }
+        .footer-copyright a:hover { text-decoration: underline; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(16, 15, 43, 0.8); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 15px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; position: relative; text-align: left; transform: scale(0.95); transition: transform 0.3s ease; }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-content h2 { text-align: center; margin-bottom: 20px; font-size: 1.2em; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--text-color); }
+        .modal-close { position: absolute; top: 10px; right: 15px; color: rgba(255, 255, 255, 0.7); font-size: 28px; font-weight: bold; cursor: pointer; transition: color 0.3s; }
+        .modal-close:hover { color: white; }
+        .bank-list { display: flex; flex-direction: column; gap: 15px; }
+        .bank-entry { background: var(--button-bg); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .bank-entry h3 { font-size: 1.05em; font-weight: 600; color: var(--gold-color); margin-bottom: 8px; }
+        .bank-entry p { font-size: 0.95em; line-height: 1.5; color: rgba(255, 255, 255, 0.9); margin: 3px 0; }
+        .copy-wrapper { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; background: rgba(0, 0, 0, 0.2); padding: 8px 12px; border-radius: 8px; }
+        .copy-wrapper span { font-weight: 500; font-family: monospace; font-size: 1em; }
+        .copy-btn { background: transparent; border: none; color: white; cursor: pointer; font-size: 1.1em; opacity: 0.8; transition: opacity 0.3s, transform 0.2s; }
+        .copy-btn:hover { opacity: 1; transform: scale(1.1); }
+        .modal-footer-notes { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border-color); text-align: center; font-size: 0.9em; line-height: 1.6; }
+        .modal-warning { color: #FF5C5C; font-weight: 600; margin-top: 8px; }
+        .floating-chat-btn { position: fixed; top: 50%; right: 15px; transform: translateY(-50%); background-color: #25D366; color: white; padding: 10px 15px; border-radius: 50px; display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 500; font-size: 0.9em; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); z-index: 999; transition: all 0.3s ease; }
+        .floating-chat-btn i { font-size: 1.5em; }
+        .floating-chat-btn:hover { transform: translateY(-50%) scale(1.05); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5); }
+    </style>
 </head>
-
 <body>
 
-<div class="card">
-    <h1>Deposit & Withdraw</h1>
-
-    <!-- Number with icon -->
-    <div class="number-box" onclick="copyNumber()">
-        <span class="number-text">074 306 62 34</span>
-        <span class="copy-icon">📋</span>
-    </div>
-    <div id="copied" class="copy-msg">Number copied!</div>
-
-    <div class="message">
-        Nishan Service Deposit number එක දැනට band වී ඇත, ඉහත number එක හරහා සම්බන්ද වෙන්න.
+    <!-- Intro / Preloader Section -->
+    <div class="intro-screen" id="intro-screen">
+        <div class="intro-content">
+            <img src="https://i.postimg.cc/c1kjm8mY/24129-removebg-preview.png" alt="Loading Logo" class="intro-logo">
+            <div class="loading-bar-container">
+                <div class="loading-bar-progress"></div>
+            </div>
+        </div>
     </div>
 
-    <div class="btn-wrapper">
-        <div class="arrow top">⬇</div>
-        <div class="arrow bottom">⬆</div>
-        <div class="arrow left">➡</div>
-        <div class="arrow right">⬅</div>
+    <!-- Main Content of the Page (Initially Hidden) -->
+    <main id="main-content" class="hidden-content">
+        <div class="main-content-wrapper">
+            <div class="card-container">
+                <header>
+                    <nav class="top-nav">
+                        <img src="https://i.postimg.cc/xdKqy48M/20260410-090221.png" alt="1xBet" loading="lazy">
+                        <img src="https://i.postimg.cc/0Nd2JKXm/20260410-090857.png" alt="Melbet" loading="lazy">
+                        <img src="https://i.postimg.cc/7hCkX592/20260410-091205.png" alt="888Starz" loading="lazy">
+                        <img src="https://i.postimg.cc/NLhW4p5s/20260410-091408.png" alt="DBbet" loading="lazy">
+                        <img src="https://i.postimg.cc/NFCYY1JN/20260410-082309.png" alt="PariPulse" loading="lazy">
+                    </nav>
+                    <div class="profile-header">
+                        <div class="profile-image-wrapper">
+                            <img src="https://i.postimg.cc/fWVSV6qr/IMG-20260406-230229-763.jpg" alt="Nishan Services Logo" class="logo">
+                            <span class="status">Online</span>
+                        </div>
+                    </div>
+                    <div class="quick-actions">
+                        <a href="https://wa.me/94742731771" target="_blank" class="action-btn reviews-btn"><i class="fa-regular fa-comment-dots"></i> Reviews</a>
+                        <a href="https://www.youtube.com/@AnuruddaCash" target="_blank" class="action-btn youtube-btn"><i class="fa-brands fa-youtube"></i> YouTube</a>
+                    </div>
+                </header>
 
-        <a href="https://wa.me/94743066234" target="_blank" class="whatsapp-btn">
-            <img src="https://img.icons8.com/ios-filled/24/ffffff/whatsapp.png"/>
-            WhatsApp
+                <main>
+                    <section class="profile-info">
+                        <h1>NISHAN SERVICE</h1>
+                        <p><i class="fa-regular fa-user"></i> Chamath Nishan Anurudda</p>
+                    </section>
+                    
+                    <section class="links-section">
+                        <a href="https://wa.me/94742731771" target="_blank" class="link-btn whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                        <a href="https://t.me/nishanservice" target="_blank" class="link-btn telegram"><i class="fa-brands fa-telegram"></i> Telegram</a>
+                        <div class="link-row">
+                            <a href="tel:0742731771" class="link-btn call"><i class="fa-solid fa-phone"></i> Call</a>
+                            <a href="https://wa.me/94742731771" target="_blank" class="link-btn email"><i class="fa-regular fa-envelope"></i> Email</a>
+                        </div>
+                        <div class="link-row">
+                            <a href="https://wa.me/94742731771" target="_blank" class="link-btn channel"><i class="fa-solid fa-tv"></i> Channel</a>
+                            <a href="https://wa.me/94742731771" target="_blank" class="link-btn facebook"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+                        </div>
+                        <a href="#" id="openBankModal" class="link-btn bank"><i class="fa-solid fa-building-columns"></i> Bank Details</a>
+                    </section>
+
+                    <section class="promo-section">
+                        <p class="sinhala-text">
+                            නව ගිණුමක් සාදන ඔබට අපගේ මෙම ප්‍රමෝකෝඩ් එක යොදා ඔබේ මුදල් දෙගුණ කර ගැනීමටද හැකියි.
+                        </p>
+                        <div class="promo-code-box" onclick="copyPromoCode('LANKAVIP')">
+                            <div class="promo-code-inner">
+                                <span class="promo-text">
+                                    <i class="fa-solid fa-rocket"></i>
+                                    <span>Promo Code: LANKAVIP</span>
+                                </span>
+                                <i class="fa-regular fa-copy" style="color: white; opacity: 0.8;"></i>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="slider-section">
+                        <div class="slider-container">
+                            <div class="slides-wrapper">
+                                <div class="slide"><img src="https://i.postimg.cc/c1gvQrw2/1776001314427-019d81ed-07c3-796c-8082-b2a6bfebbd6d.png" alt="Slider 1" loading="lazy"></div>
+                                <div class="slide"><img src="https://i.postimg.cc/W413t3sf/1776001387130-019d81ee-2e2c-7a4e-b4c9-bfe13632ff26.png" alt="Slider 2" loading="lazy"></div>
+                                <div class="slide"><img src="https://i.postimg.cc/zDgfy4YP/1776001438859-019d81ef-0258-7cf4-9c93-ba2a0b1ceedb.png" alt="Slider 3" loading="lazy"></div>
+                                <div class="slide"><img src="https://i.postimg.cc/HLnYdhtX/1776001484994-019d81ef-b7d3-7e95-9f79-485e413fa150.png" alt="Slider 4" loading="lazy"></div>
+                                <div class="slide"><img src="https://i.postimg.cc/1tNyNV2w/1776001542667-019d81f0-8891-7415-a917-314fa9bad73f.png" alt="Slider 5" loading="lazy"></div>
+                            </div>
+                            <div class="slider-dots"></div>
+                        </div>
+                    </section>
+
+                    <h3 class="registration-heading"><i class="fa-solid fa-gem"></i> Quick Registration</h3>
+                    
+                    <section class="registration-links">
+                        <a href="https://reffpa.com/L?tag=d_5372812m_97c_&site=5372812&ad=97" target="_blank" class="link-btn">
+                            <img src="https://i.postimg.cc/xdKqy48M/20260410-090221.png" alt="1xBet">
+                        </a>
+                        <a href="#" class="link-btn">
+                            <img src="https://i.postimg.cc/0Nd2JKXm/20260410-090857.png" alt="Melbet">
+                        </a>
+                        <a href="https://top100bonus.com/L?tag=d_5410288m_141975c_&site=5410288&ad=141975" target="_blank" class="link-btn">
+                            <img src="https://i.postimg.cc/7hCkX592/20260410-091205.png" alt="888Starz">
+                        </a>
+                        <a href="https://refpa96317.com/L?tag=d_4416005m_11215c_&site=4416005&ad=11215" target="_blank" class="link-btn">
+                            <img src="https://i.postimg.cc/NLhW4p5s/20260410-091408.png" alt="DBbet">
+                        </a>
+                        <a href="#" class="link-btn">
+                            <img src="https://i.postimg.cc/NFCYY1JN/20260410-082309.png" alt="PariPulse">
+                        </a>
+                    </section>
+
+                     <section class="features-list">
+                        <p><i class="fa-solid fa-square-check"></i> වේගවත් සහ ආරක්ෂිතයි.</p>
+                        <p><i class="fa-solid fa-square-check"></i> 100% විශ්වාසයි.</p>
+                    </section>
+
+                    <p class="cashback-offer">
+                        <span role="img" aria-label="money-bag">💰</span> පළමු තැන්පතුවට 2% ක ක්ෂණික Cash Back දීමනාවක්!<br>අදම සම්බන්ධ වන්න.
+                    </p>
+                </main>
+
+                <footer class="main-footer">
+                    <div class="footer-contact">
+                        <p>Phone (Call/WhatsApp): 074 273 1771</p>
+                    </div>
+                    <div class="footer-copyright">
+                        <p><i class="fa-solid fa-briefcase"></i> Professional Cash Services <i class="fa-solid fa-briefcase"></i></p>
+                        <p>&copy; 2025 NISHAN SERVICE All Rights Reserved. Developed By <a href="https://t.me/monixpvt" target="_blank">cnaappteam.com</a></p>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+        <div id="bankDetailsModal" class="modal-overlay">
+            <div class="modal-content">
+                <span id="closeBankModal" class="modal-close">&times;</span>
+                <h2><i class="fa-solid fa-building-columns"></i> Bank Details</h2>
+                <div class="bank-list">
+                    <div class="bank-entry"><h3>Bank - I Pay</h3><p>Name: Rathana BS</p><div class="copy-wrapper"><span>Account: 0743066234</span><button class="copy-btn" title="Copy Account Number"><i class="fa-regular fa-copy"></i></button></div></div>
+                    <div class="bank-entry"><h3>Bank - Bank Of Ceylon</h3><p>Name: Rathana BS</p><p>Branch: Baduraliya</p><div class="copy-wrapper"><span>Account: 0090575518</span><button class="copy-btn" title="Copy Account Number"><i class="fa-regular fa-copy"></i></button></div></div>
+                    <div class="bank-entry"><h3>Bank - Peoples Bank</h3><p>Name: Rathana BS</p><p>Branch: Matugama</p><div class="copy-wrapper"><span>Account: 070200120065175</span><button class="copy-btn" title="Copy Account Number"><i class="fa-regular fa-copy"></i></button></div></div>
+                    <div class="bank-entry"><h3>Bank - LOLC Finance</h3><p>Name: Rathana BS</p><p>Branch: Baduraliya</p><div class="copy-wrapper"><span>Account: 10310007330</span><button class="copy-btn" title="Copy Account Number"><i class="fa-regular fa-copy"></i></button></div></div>
+                    <div class="bank-entry"><h3>Bank - Sampath Bank</h3><p>Name: Rathana BS</p><p>Branch: Horana</p><div class="copy-wrapper"><span>Account: 105755258347</span><button class="copy-btn" title="Copy Account Number"><i class="fa-regular fa-copy"></i></button></div></div>
+                </div>
+                <div class="modal-footer-notes"><p>මෙම Bank Details වලට මුදල් තැම්පත් කොට අපගෙ Whatsapp වෙත Slip සහා ඔබගේ Game ID එවන්න.</p><p class="modal-warning">විනාඩි 10 ක් තුළ එවන්න.</p></div>
+            </div>
+        </div>
+
+        <a href="https://wa.me/94742731771" target="_blank" class="floating-chat-btn">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span>Live Chat</span>
         </a>
-    </div>
+    </main>
 
-    <div class="note">
-        මේ බටන් එක ඔබන්න එවිට අපව සම්බන්ධ කරගත හැක.
-    </div>
-</div>
+    <script>
+        // --- INTRO SCREEN LOGIC ---
+        window.addEventListener('load', () => {
+            const introScreen = document.getElementById('intro-screen');
+            const mainContent = document.getElementById('main-content');
+            
+            // Set a timer to hide the intro screen after the animation
+            setTimeout(() => {
+                introScreen.classList.add('hidden');
+                mainContent.classList.remove('hidden-content');
+                mainContent.style.display = 'block'; // Ensure it's visible
+            }, 5500); // 5.5 seconds (5 for animation, 0.5 for buffer)
+        });
 
-<script>
-function copyNumber() {
-    const text = "0743066234";
-    navigator.clipboard.writeText(text);
+        // --- REST OF YOUR SCRIPT ---
+        function copyPromoCode(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Promo Code "' + text + '" copied to clipboard!');
+            }, (err) => {
+                alert('Could not copy text: ', err);
+            });
+        }
 
-    const msg = document.getElementById("copied");
-    msg.style.display = "block";
+        document.addEventListener('DOMContentLoaded', () => {
+            const slidesWrapper = document.querySelector('.slides-wrapper');
+            const dotsContainer = document.querySelector('.slider-dots');
+            if (slidesWrapper && dotsContainer) {
+                const originalSlides = document.querySelectorAll('.slide');
+                const originalSlideCount = originalSlides.length;
 
-    setTimeout(() => {
-        msg.style.display = "none";
-    }, 2000);
-}
-</script>
+                if (originalSlideCount > 0) {
+                    const firstClone = originalSlides[0].cloneNode(true);
+                    const lastClone = originalSlides[originalSlideCount - 1].cloneNode(true);
+                    slidesWrapper.appendChild(firstClone);
+                    slidesWrapper.insertBefore(lastClone, originalSlides[0]);
 
+                    const allSlides = document.querySelectorAll('.slide');
+                    const totalSlides = allSlides.length;
+                    slidesWrapper.style.width = `${totalSlides * 100}%`;
+                    allSlides.forEach(slide => slide.style.width = `${100 / totalSlides}%`);
+                    
+                    let currentIndex = 1; 
+                    let autoSlideInterval;
+
+                    slidesWrapper.style.transform = `translateX(-${currentIndex * (100 / totalSlides)}%)`;
+
+                    for (let i = 0; i < originalSlideCount; i++) {
+                        const dot = document.createElement('div');
+                        dot.classList.add('dot');
+                        dot.addEventListener('click', () => {
+                            moveToSlide(i + 1);
+                            resetInterval();
+                        });
+                        dotsContainer.appendChild(dot);
+                    }
+                    const dots = document.querySelectorAll('.dot');
+                    updateDots();
+
+                    function moveToSlide(index) {
+                        slidesWrapper.classList.add('sliding');
+                        currentIndex = index;
+                        slidesWrapper.style.transform = `translateX(-${currentIndex * (100 / totalSlides)}%)`;
+                        updateDots();
+                    }
+
+                    function updateDots() {
+                        dots.forEach(dot => dot.classList.remove('active'));
+                        let dotIndex = currentIndex - 1;
+                        if (currentIndex === 0) {
+                            dotIndex = originalSlideCount - 1;
+                        } else if (currentIndex === totalSlides - 1) {
+                            dotIndex = 0;
+                        }
+                        if(dots[dotIndex]) dots[dotIndex].classList.add('active');
+                    }
+                    
+                    function resetInterval() {
+                        clearInterval(autoSlideInterval);
+                        autoSlideInterval = setInterval(nextSlide, 3000);
+                    }
+
+                    slidesWrapper.addEventListener('transitionend', () => {
+                        if (currentIndex === 0) {
+                            slidesWrapper.classList.remove('sliding');
+                            currentIndex = originalSlideCount;
+                            slidesWrapper.style.transform = `translateX(-${currentIndex * (100 / totalSlides)}%)`;
+                        } else if (currentIndex === totalSlides - 1) {
+                            slidesWrapper.classList.remove('sliding');
+                            currentIndex = 1;
+                            slidesWrapper.style.transform = `translateX(-${currentIndex * (100 / totalSlides)}%)`;
+                        }
+                    });
+
+                    function nextSlide() {
+                        moveToSlide(currentIndex + 1);
+                    }
+                    
+                    resetInterval();
+                }
+            }
+        
+            const openModalBtn = document.getElementById('openBankModal');
+            const bankModal = document.getElementById('bankDetailsModal');
+            const closeModalBtn = document.getElementById('closeBankModal');
+
+            if(openModalBtn && bankModal && closeModalBtn) {
+                openModalBtn.addEventListener('click', (event) => {
+                    event.preventDefault(); 
+                    bankModal.classList.add('active');
+                });
+                function closeModal() {
+                    bankModal.classList.remove('active');
+                }
+                closeModalBtn.addEventListener('click', closeModal);
+                bankModal.addEventListener('click', (event) => {
+                    if (event.target === bankModal) {
+                        closeModal();
+                    }
+                });
+            }
+
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const wrapper = event.currentTarget.parentElement;
+                    const textToCopy = wrapper.querySelector('span').textContent.split(': ')[1];
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        const originalIcon = button.innerHTML;
+                        button.innerHTML = '<i class="fa-solid fa-check" style="color: var(--light-green-color);"></i>';
+                        setTimeout(() => {
+                            button.innerHTML = originalIcon;
+                        }, 1500);
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
+                        alert('Could not copy text.');
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
