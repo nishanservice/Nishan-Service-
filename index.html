@@ -1,222 +1,237 @@
 <!DOCTYPE html>
 <html lang="si">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Nishan Service</title>
-
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background: #0b1e3c;
-    color: #fff;
-    margin: 0;
-    text-align: center;
-}
-
-/* TOP BAR */
-.top-bar {
-    background: #25D366;
-    padding: 15px;
-}
-
-.copy-btn {
-    background: #fff;
-    color: #25D366;
-    border: none;
-    padding: 5px 10px;
-    margin-left: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.whatsapp-btn {
-    margin-top: 10px;
-    display: inline-block;
-    background: #128C7E;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-}
-
-/* HEADER */
-.title {
-    font-size: 28px;
-    font-weight: bold;
-    margin-top: 20px;
-}
-
-.subtitle {
-    color: gold;
-    margin-bottom: 20px;
-}
-
-/* BANK */
-.bank-card {
-    background: #fff;
-    color: #000;
-    margin: 10px auto;
-    padding: 15px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
-    text-align: left;
-}
-
-.bank-name {
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.copy-bank {
-    margin-top: 10px;
-    padding: 6px 12px;
-    background: #25D366;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.footer {
-    margin-top: 20px;
-    font-size: 14px;
-    padding: 10px;
-}
-
-/* ADMIN BUTTON (Hidden Bottom) */
-.admin-btn {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    padding: 6px 10px;
-    font-size: 12px;
-    background: rgba(255, 0, 0, 0.4);
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    opacity: 0.4;
-}
-
-.admin-btn:hover {
-    opacity: 1;
-}
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nishan Service</title>
+    <style>
+        /* CSS කේතය */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+            background-color: #f4f4f9; 
+            color: #333; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container { 
+            background-color: #ffffff; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+            text-align: center; 
+            max-width: 500px; 
+            width: 90%; 
+            margin: 20px auto; 
+        }
+        h1 { 
+            color: #2c3e50; 
+            margin-top: 0; 
+            margin-bottom: 5px; 
+            font-size: 2.5em; 
+        }
+        h2 { 
+            color: #7f8c8d; 
+            font-weight: normal; 
+            font-size: 1.2em; 
+            margin-top: 0; 
+            margin-bottom: 25px; 
+        }
+        p { 
+            font-size: 1.1em; 
+            line-height: 1.6; 
+        }
+        .contact-number { 
+            font-weight: bold; 
+            color: #e74c3c; 
+        }
+        .whatsapp-button { 
+            display: inline-block; 
+            background-color: #25D366; 
+            color: #ffffff; 
+            padding: 12px 25px; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            font-size: 1.2em; 
+            font-weight: bold; 
+            margin-top: 15px; 
+            transition: background-color 0.3s, transform 0.2s; 
+        }
+        .whatsapp-button:hover { 
+            background-color: #128C7E; 
+            transform: scale(1.05); 
+        }
+        .whatsapp-button img { 
+            width: 24px; 
+            vertical-align: middle; 
+            margin-right: 10px; 
+        }
+        .button-caption { 
+            font-size: 0.9em; 
+            color: #555; 
+            margin-top: 10px; 
+        }
+        .overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0, 0, 0, 0.7); 
+            display: none; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 1000; 
+        }
+        .admin-panel { 
+            background-color: white; 
+            padding: 25px; 
+            border-radius: 8px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+            width: 90%; 
+            max-width: 400px; 
+            text-align: center; 
+        }
+        .admin-panel h3 { 
+            margin-top: 0; 
+        }
+        .admin-panel input { 
+            width: calc(100% - 20px); 
+            padding: 10px; 
+            margin-bottom: 15px; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            font-size: 1em; 
+        }
+        .admin-panel button { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 1em; 
+            margin: 5px; 
+        }
+        .admin-panel .save-btn { 
+            background-color: #28a745; 
+            color: white; 
+        }
+        .admin-panel .close-btn { 
+            background-color: #dc3545; 
+            color: white; 
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- TOP BAR -->
-<div class="top-bar">
-    WhatsApp: <span id="number"></span>
-    <button class="copy-btn" onclick="copyText()">Copy</button>
+    <div class="container" id="mainContainer">
+        <h1>NISHAN SERVICE</h1>
+        <h2>official master cash agent</h2>
 
-    <div style="font-size:13px; margin-top:5px;">
-        මේ මොහොතේ අපව සම්බන්ද කර ගත හැකි number එක
+        <p>මේ මොහොතේ අපව සම්බන්ද කර ගත හැකි WhatsApp Number <span class="contact-number" id="phoneNumberDisplay">...</span></p>
+
+        <a href="#" target="_blank" class="whatsapp-button" id="whatsappLink">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo">
+            WhatsApp කරන්න
+        </a>
+        
+        <p class="button-caption">අපව සම්බන්ද කර ගැනීමට බටන් එක ඔබන්න</p>
     </div>
 
-    <a id="waLink" class="whatsapp-btn" target="_blank">
-        📱 WhatsApp මඟින් සම්බන්ධ වන්න
-    </a>
-</div>
+    <!-- Admin Panel HTML (Initially Hidden) -->
+    <div class="overlay" id="adminOverlay">
+        <div class="admin-panel">
+            <h3>Admin: Change Phone Number</h3>
+            <input type="text" id="newPhoneNumberInput" placeholder="Enter new number (e.g., 0712345678)">
+            <button id="saveBtn" class="save-btn">Save</button>
+            <button id="closeBtn" class="close-btn">Close</button>
+        </div>
+    </div>
 
-<!-- TITLE -->
-<div class="title">NISHAN SERVICE</div>
-<div class="subtitle">Deposit Bank Information</div>
+<!-- Firebase SDKs -->
+<script type="module">
+    // Import the functions you need from the SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-<!-- BANKS -->
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBAoNg74acDWNogdirzbR1cGoLHmeMrdTE",
+        authDomain: "firabse-fb848.firebaseapp.com",
+        databaseURL: "https://firabse-fb848-default-rtdb.firebaseio.com",
+        projectId: "firabse-fb848",
+        storageBucket: "firabse-fb848.firebasestorage.app",
+        messagingSenderId: "560100629953",
+        appId: "1:560100629953:web:9e5489567dd1a42ed52340",
+        measurementId: "G-9VYVXY9B1B"
+    };
 
-<div class="bank-card">
-    <div class="bank-name">iPay</div>
-    ගිණුම් අංකය: <b id="ipay">0743066234</b><br>
-    නම: Rathana BS<br>
-    <button class="copy-bank" onclick="copyAcc('ipay')">Copy Account Number</button>
-</div>
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
 
-<div class="bank-card">
-    <div class="bank-name">Bank Of Ceylon</div>
-    ගිණුම් අංකය: <b id="boc">0090575518</b><br>
-    නම: Rathana BS<br>
-    ශාඛාව: Baduraliya<br>
-    <button class="copy-bank" onclick="copyAcc('boc')">Copy Account Number</button>
-</div>
+    // DOM Elements
+    const mainContainer = document.getElementById('mainContainer');
+    const adminOverlay = document.getElementById('adminOverlay');
+    const newPhoneNumberInput = document.getElementById('newPhoneNumberInput');
+    const saveBtn = document.getElementById('saveBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    const phoneNumberDisplay = document.getElementById('phoneNumberDisplay');
+    const whatsappLink = document.getElementById('whatsappLink');
 
-<div class="bank-card">
-    <div class="bank-name">People’s Bank</div>
-    ගිණුම් අංකය: <b id="peoples">070200120065175</b><br>
-    නම: Rathana BS<br>
-    ශාඛාව: Matugama<br>
-    <button class="copy-bank" onclick="copyAcc('peoples')">Copy Account Number</button>
-</div>
+    // Reference to the phone number in the database
+    const phoneNumberRef = ref(database, 'config/phoneNumber');
 
-<div class="bank-card">
-    <div class="bank-name">LOLC Finance</div>
-    ගිණුම් අංකය: <b id="lolc">10310007330</b><br>
-    නම: Rathana BS<br>
-    ශාඛාව: Baduraliya<br>
-    <button class="copy-bank" onclick="copyAcc('lolc')">Copy Account Number</button>
-</div>
-
-<div class="bank-card">
-    <div class="bank-name">Sampath Bank</div>
-    ගිණුම් අංකය: <b id="sampath">105755258347</b><br>
-    නම: Rathana BS<br>
-    ශාඛාව: Horana<br>
-    <button class="copy-bank" onclick="copyAcc('sampath')">Copy Account Number</button>
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-    📍 මුදල් ලබා ගැනීම: Baduraliya - Nishan Service<br><br>
-    ⚠️ මුදල් යැවූ පසු WhatsApp මඟින් screenshot එක එවන්න.
-</div>
-
-<!-- ADMIN BUTTON (BOTTOM HIDDEN) -->
-<button class="admin-btn" onclick="adminLogin()">Admin</button>
-
-<script>
-
-// Load WhatsApp number
-let number = localStorage.getItem("waNumber") || "0742731771";
-updateNumber();
-
-function updateNumber(){
-    document.getElementById("number").innerText = number;
-    document.getElementById("waLink").href = "https://wa.me/94" + number.substring(1);
-}
-
-// Copy number
-function copyText(){
-    navigator.clipboard.writeText(number);
-    alert("Number Copied!");
-}
-
-// Copy account number
-function copyAcc(id){
-    let text = document.getElementById(id).innerText;
-    navigator.clipboard.writeText(text);
-    alert("Account Number Copied!");
-}
-
-// Admin login
-function adminLogin(){
-    let pass = prompt("Enter Password");
-    if(pass === "2003"){
-        let newNum = prompt("New WhatsApp Number");
-        if(newNum){
-            localStorage.setItem("waNumber", newNum);
-            number = newNum;
-            updateNumber();
-            alert("Updated!");
+    // Function to update the number on the page
+    function updateNumberOnPage(number) {
+        if (number) {
+            phoneNumberDisplay.innerText = number;
+            const formattedNumber = number.replace(/^0+/, ''); // Remove leading zero for wa.me link
+            whatsappLink.href = `https://wa.me/94${formattedNumber}?text=deposit`;
         }
-    } else {
-        alert("Wrong Password");
     }
-}
+
+    // REAL-TIME LISTENER: Listen for data changes at phoneNumberRef
+    onValue(phoneNumberRef, (snapshot) => {
+        const number = snapshot.val();
+        updateNumberOnPage(number);
+    });
+
+    // Admin panel logic
+    mainContainer.addEventListener('dblclick', () => {
+        const password = prompt("Please enter the admin password:");
+        if (password === '2003') {
+            newPhoneNumberInput.value = phoneNumberDisplay.innerText;
+            adminOverlay.style.display = 'flex';
+        } else if (password !== null) {
+            alert("Incorrect password!");
+        }
+    });
+
+    saveBtn.addEventListener('click', () => {
+        const newNumber = newPhoneNumberInput.value.trim();
+        if (newNumber && !isNaN(newNumber) && newNumber.length >= 9) {
+            // Write the new number to Firebase
+            set(phoneNumberRef, newNumber)
+                .then(() => {
+                    alert('Phone number updated successfully in Firebase!');
+                    adminOverlay.style.display = 'none';
+                })
+                .catch((error) => {
+                    alert('Error updating number: ' + error.message);
+                });
+        } else {
+            alert('Please enter a valid phone number.');
+        }
+    });
+
+    closeBtn.addEventListener('click', () => {
+        adminOverlay.style.display = 'none';
+    });
+    
+    adminOverlay.addEventListener('click', (event) => {
+        if (event.target === adminOverlay) {
+            adminOverlay.style.display = 'none';
+        }
+    });
 
 </script>
 
